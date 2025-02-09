@@ -74,6 +74,8 @@ class Book extends Model
             $query->where(column: 'created_at', operator: '<=', value: $to);
         } elseif ($from && $to) {
             $query->whereBetween(column: 'created_at', values: [$from, $to]);
+        } else {
+            return;
         }
     }
 }
