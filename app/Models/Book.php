@@ -60,6 +60,17 @@ class Book extends Model
     }
 
     /**
+     * Query builder to limit results to more than a minimum number of reviews
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $minReviews
+     * @return Builder
+     */
+    public function scopeMinReviews(Builder $query, int $minReviews): Builder
+    {
+        return $query->having(column: 'reviews_count', operator: '>=', value: $minReviews);
+    }
+
+    /**
      * Helper function for applying date filters
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param mixed $from
