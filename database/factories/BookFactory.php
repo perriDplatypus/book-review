@@ -16,10 +16,10 @@ class BookFactory extends Factory
      */
     public function definition(): array
     {
-        $created_at = fake()->dateTimeBetween('-2 years');
-        $updated_at = fake()->dateTimeBetween($created_at, 'now');
+        $created_at = fake()->dateTimeBetween(startDate: '-2 years');
+        $updated_at = fake()->dateTimeBetween(startDate: $created_at, endDate: 'now');
         return [
-            'title' => fake()->sentence(3),
+            'title' => fake()->sentence(nbWords: 3),
             'author' => fake()->name,
             'created_at' => $created_at,
             'updated_at' => $updated_at

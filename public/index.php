@@ -2,10 +2,10 @@
 
 use Illuminate\Http\Request;
 
-define('LARAVEL_START', microtime(true));
+define(constant_name: 'LARAVEL_START', value: microtime(as_float: true));
 
 // Determine if the application is in maintenance mode...
-if (file_exists($maintenance = __DIR__ . '/../storage/framework/maintenance.php')) {
+if (file_exists(filename: $maintenance = __DIR__ . '/../storage/framework/maintenance.php')) {
     require $maintenance;
 }
 

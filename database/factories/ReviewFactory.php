@@ -16,40 +16,40 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
-        $created_at = fake()->dateTimeBetween('-2 years');
-        $updated_at = fake()->dateTimeBetween($created_at, 'now');
+        $created_at = fake()->dateTimeBetween(startDate: '-2 years');
+        $updated_at = fake()->dateTimeBetween(startDate: $created_at, endDate: 'now');
         return [
             'book_id' => null,
             'review' => fake()->paragraph(),
-            'rating' => fake()->numberBetween(1, 5),
+            'rating' => fake()->numberBetween(int1: 1, int2: 5),
             'created_at' => $created_at,
             'updated_at' => $updated_at
         ];
     }
 
-    public function good()
+    public function good(): ReviewFactory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(state: function (array $attributes): array {
             return [
-                'rating' => fake()->numberBetween(4, 5)
+                'rating' => fake()->numberBetween(int1: 4, int2: 5)
             ];
         });
     }
 
-    public function average()
+    public function average(): ReviewFactory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(state: function (array $attributes): array {
             return [
-                'rating' => fake()->numberBetween(2, 5)
+                'rating' => fake()->numberBetween(int1: 2, int2: 5)
             ];
         });
     }
 
-    public function bad()
+    public function bad(): ReviewFactory
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function (array $attributes): array {
             return [
-                'rating' => fake()->numberBetween(1, 3)
+                'rating' => fake()->numberBetween(int1: 1, int2: 3)
             ];
         });
     }
