@@ -11,16 +11,33 @@ class Book extends Model
 {
     use HasFactory;
 
+    /**
+     * Establishes one to many foreign key relationship with reviews 
+     * @return HasMany<Review, Book>
+     */
     public function reviews(): HasMany
     {
         return $this->hasMany(related: Review::class);
     }
 
+    /**
+     * Query builder for searching by title
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $title
+     * @return Builder
+     */
     public function scopeTitle(Builder $query, string $title): Builder
     {
         return $query->where(column: 'title', operator: 'LIKE', value: '%' . $title . '%');
     }
 
+    /**
+     * Query builder for searching by popular books 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $from
+     * @param mixed $to
+     * @return Builder
+     */
     public function scopePopular(Builder $query, $from = null, $to = null): Builder
     {
         return $query->withCount(relations: [
@@ -28,6 +45,13 @@ class Book extends Model
         ])->orderBy(column: 'reviews_count', direction: 'desc');
     }
 
+    /**
+     * Query builder for searching by highest rated books
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $from
+     * @param mixed $to
+     * @return Builder
+     */
     public function scopeHighestRated(Builder $query, $from = null, $to = null): Builder
     {
         return $query->withAvg(relation: [
@@ -35,6 +59,13 @@ class Book extends Model
         ], column: 'rating')->orderBy(column: 'reviews_avg_rating', direction: 'desc');
     }
 
+    /**
+     * Helper function for applying date filters
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed $from
+     * @param mixed $to
+     * @return void
+     */
     private function dateRangeFilter(Builder $query, $from = null, $to = null): void
     {
         if ($from && !$to) {

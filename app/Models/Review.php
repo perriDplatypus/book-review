@@ -12,6 +12,10 @@ class Review extends Model
 
     protected $fillable = ['review', 'rating'];
 
+    /**
+     * Establishes many to one foreign key relationship with reviews
+     * @return BelongsTo<Book, Review>
+     */
     public function book(): BelongsTo
     {
         return $this->belongsTo(related: Book::class);
