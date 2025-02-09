@@ -21,13 +21,28 @@ class Book extends Model
         return $query->where(column: 'title', operator: 'LIKE', value: '%' . $title . '%');
     }
 
-    public function scopePopular(Builder $query): Builder
+    public function scopePopular(Builder $query, $from = null, $to = null): Builder
     {
-        return $query->withCount(relations: 'reviews')->orderBy(column: 'reviews_count', direction: 'desc');
+        return $query->withCount(relations: [
+            'reviews' => fn(Builder $q) => $this->dateRangeFilter(query: $q, from: $from, to: $to)
+        ])->orderBy(column: 'reviews_count', direction: 'desc');
     }
 
-    public function scopeHighestRated(Builder $query): Builder
+    public function scopeHighestRated(Builder $query, $from = null, $to = null): Builder
     {
-        return $query->withAvg(relation: 'reviews', column: 'rating')->orderBy(column: 'reviews_avg_rating', direction: 'desc');
+        return $query->withAvg(relation: [
+            'reviews' => fn(Builder $q) => $this->dateRangeFilter(query: $q, from: $from, to: $to)
+        ], column: 'rating')->orderBy(column: 'reviews_avg_rating', direction: 'desc');
+    }
+
+    private function dateRangeFilter(Builder $query, $from = null, $to = null): void
+    {
+        if ($from && !$to) {
+            $query->where(column: 'created_at', operator: '>=', value: $from);
+        } elseif (!$from && $to) {
+            $query->where(column: 'created_at', operator: '<=', value: $to);
+        } elseif ($from && $to) {
+            $query->whereBetween(column: 'created_at', values: [$from, $to]);
+        }
     }
 }
