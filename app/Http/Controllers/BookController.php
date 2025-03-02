@@ -54,9 +54,18 @@ class BookController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id): void
+    public function show(Book $book): View
     {
-        //
+        return view(
+            view: 'books.show'
+            , data: [
+                'book' => $book->load(
+                    relations: [
+                        'reviews' => fn($query): mixed => $query->latest()
+                    ]
+                )
+            ]
+        );
     }
 
     /**
