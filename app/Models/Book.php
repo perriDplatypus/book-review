@@ -11,6 +11,7 @@ class Book extends Model
 {
     use HasFactory;
 
+
     /**
      * Establishes one to many foreign key relationship with reviews
      * @return HasMany<Review, Book>
@@ -19,6 +20,7 @@ class Book extends Model
     {
         return $this->hasMany(related: Review::class);
     }
+
 
     /**
      * Query builder for searching by title
@@ -30,6 +32,7 @@ class Book extends Model
     {
         return $query->where(column: 'title', operator: 'LIKE', value: '%' . $title . '%');
     }
+
 
     /**
      * Query builder for searching by popular books
@@ -45,6 +48,7 @@ class Book extends Model
         ])->orderBy(column: 'reviews_count', direction: 'desc');
     }
 
+
     /**
      * Query builder for searching by highest rated books
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -59,6 +63,7 @@ class Book extends Model
         ], column: 'rating')->orderBy(column: 'reviews_avg_rating', direction: 'desc');
     }
 
+
     /**
      * Query builder to limit results to more than a minimum number of reviews
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -70,6 +75,7 @@ class Book extends Model
         return $query->having(column: 'reviews_count', operator: '>=', value: $minReviews);
     }
 
+
     /**
      * Query builder to get the most popular books for the last month
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -79,6 +85,7 @@ class Book extends Model
     {
         return $query->popular(now()->subMonth(), now())->highestRated()->minReviews(2);
     }
+
 
     /**
      * Query builder to get the most popular books for the last 6 months
@@ -90,6 +97,7 @@ class Book extends Model
         return $query->popular(now()->subMonths(value: 6), now())->highestRated()->minReviews(5);
     }
 
+
     /**
      * Query builder to get highest rated books for the last month
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -100,6 +108,7 @@ class Book extends Model
         return $query->highestRated()->popular(now()->subMonth(), now())->minReviews(2);
     }
 
+
     /**
      * Query builder to get highest rated books for the last 6 months
      * @param \Illuminate\Database\Eloquent\Builder $query
@@ -109,6 +118,7 @@ class Book extends Model
     {
         return $query->highestRated()->popular(now()->subMonths(value: 6), now())->minReviews(5);
     }
+
 
     /**
      * Helper function for applying date filters
@@ -129,4 +139,5 @@ class Book extends Model
             return;
         }
     }
+
 }

@@ -6,6 +6,7 @@ use App\Models\Book;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BookController extends Controller
 {
@@ -32,8 +33,11 @@ class BookController extends Controller
 
         $books = $books->get();
 
+        //$books = Cache::remember(key: 'books', ttl: 3600, callback: fn() => $books->get());
+
         return view(view: 'books.index', data: ['books' => $books]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -51,6 +55,7 @@ class BookController extends Controller
         //
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -58,7 +63,8 @@ class BookController extends Controller
     {
         return view(
             view: 'books.show'
-            , data: [
+            ,
+            data: [
                 'book' => $book->load(
                     relations: [
                         'reviews' => fn($query): mixed => $query->latest()
@@ -68,6 +74,7 @@ class BookController extends Controller
         );
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -75,6 +82,7 @@ class BookController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -84,6 +92,7 @@ class BookController extends Controller
         //
     }
 
+
     /**
      * Remove the specified resource from storage.
      */
@@ -91,4 +100,5 @@ class BookController extends Controller
     {
         //
     }
+
 }
